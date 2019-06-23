@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace StaplesBackend.Data
 {
-    public class ClientOrder
+    public class Order
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(256)] // to do: set some size in every id
         public int ClientId { get; set; }
+
+        [Required]
+        public string Value { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime OrderTime { get; set; }
     }
 }

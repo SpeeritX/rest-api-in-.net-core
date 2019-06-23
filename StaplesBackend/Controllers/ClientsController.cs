@@ -46,6 +46,25 @@ namespace StaplesBackend.Controllers
             return Ok(client);
         }
 
+        // GET: api/Clients/5/orders
+        [HttpGet("{id}/orders")]
+        public async Task<IActionResult> GetOrdersOfClient([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var orders = _context.Orders.Where(o => o.ClientId == id);
+
+            if (orders == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
+
         // GET: api/Clients/search/login/somelogin
         [HttpGet("search/login/{login}")]
         public async Task<IActionResult> SearchClientsByLogin([FromRoute] string login)
@@ -64,7 +83,7 @@ namespace StaplesBackend.Controllers
 
             return Ok(client);
         }
-        
+
         // GET: api/Clients/search/firstname/somename
         [HttpGet("search/firstname/{name}")]
         public async Task<IActionResult> SearchClientsByFirstName([FromRoute] string name)
@@ -82,7 +101,7 @@ namespace StaplesBackend.Controllers
             }
 
             return Ok(clients);
-        }        
+        }
 
         // GET: api/Clients/search/lastname/somename
         [HttpGet("search/lastname/{name}")]
@@ -146,11 +165,32 @@ namespace StaplesBackend.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
+        }
+
+        // POST: api/Clients/5/addorder
+        [HttpPost("{id}/addorder")]
+        public async Task<IActionResult> AddOrder([FromRoute] int id, [FromBody] Order order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var client = await _context.Clients.FindAsync(id);
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            order.ClientId = id;
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            return NoContent();
         }
 
         // DELETE: api/Clients/5

@@ -28,31 +28,7 @@ namespace StaplesBackend.Data
         [MaxLength(256)]
         public string Email { get; set; }
 
-        [MaxLength(16)]
-        [Phone]
-        public string Phone { get; set; }
-    }
-
-
-    public class ClientQuery
-    {
-        [Key]
-        public int Id { get; set; }
-
-        [MaxLength(256)]
-        public string Login { get; set; }
-
-        [MaxLength(256)]
-        public string FirstName { get; set; }
-
-        [MaxLength(256)]
-        public string LastName { get; set; }
-
-        [MaxLength(256)]
-        public string Email { get; set; }
-
-        [MaxLength(16)]
-        public string Phone { get; set; }
+        public int Phone { get; set; }
     }
 }
 
