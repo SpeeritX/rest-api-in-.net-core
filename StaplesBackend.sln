@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaplesBackend", "StaplesBackend\StaplesBackend.csproj", "{0372E813-B6D0-41F1-BD55-4D3EABE78B1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0372E813-B6D0-41F1-BD55-4D3EABE78B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0372E813-B6D0-41F1-BD55-4D3EABE78B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0372E813-B6D0-41F1-BD55-4D3EABE78B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0372E813-B6D0-41F1-BD55-4D3EABE78B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF62BE8A-5AC4-41ED-B85A-44CB76C504CF}
+	EndGlobalSection
+EndGlobal
