@@ -8,13 +8,29 @@ namespace StaplesBackend.Data
 {
     public class Order
     {
+        public Order()
+        {
+            OrderTime = DateTime.Now;
+        }
+        public Order(Order order)
+        {
+            ClientId = order.ClientId;
+            Item = order.Item;
+            Amount = order.Amount;
+            OrderTime = order.OrderTime;
+        }
+
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public int ClientId { get; set; }
 
         [Required]
-        public string Value { get; set; }
+        public int Item { get; set; }
+
+        [Required]
+        public int Amount { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime OrderTime { get; set; }

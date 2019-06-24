@@ -8,6 +8,7 @@ namespace StaplesBackend.Data
 {
     public class Client
     {
+
         [Key]
         public int Id { get; set; }
 
@@ -29,6 +30,10 @@ namespace StaplesBackend.Data
         public string Email { get; set; }
 
         public int Phone { get; set; }
+
+        public IList<CurrentOrder> Orders { get; set; }
+
+        public IList<ArchivedOrder> ArchivedOrders { get; set; }
     }
 }
 

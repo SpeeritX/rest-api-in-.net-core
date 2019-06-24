@@ -22,7 +22,7 @@ namespace StaplesBackend.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        public IEnumerable<Order> GetOrders()
+        public IEnumerable<CurrentOrder> GetOrders()
         {
             return _context.Orders;
         }
@@ -48,7 +48,7 @@ namespace StaplesBackend.Controllers
 
         // PUT: api/Orders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder([FromRoute] int id, [FromBody] Order order)
+        public async Task<IActionResult> PutOrder([FromRoute] int id, [FromBody] CurrentOrder order)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace StaplesBackend.Controllers
 
         // POST: api/Orders
         [HttpPost]
-        public async Task<IActionResult> PostOrder([FromBody] Order order)
+        public async Task<IActionResult> PostOrder([FromBody] CurrentOrder order)
         {
             if (!ModelState.IsValid)
             {
