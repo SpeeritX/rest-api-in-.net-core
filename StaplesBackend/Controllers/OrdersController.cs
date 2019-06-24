@@ -24,7 +24,7 @@ namespace StaplesBackend.Controllers
         [HttpGet]
         public IEnumerable<CurrentOrder> GetOrders()
         {
-            return _context.Orders;
+            return _context.CurrentOrders;
         }
 
         // GET: api/Orders/5
@@ -36,7 +36,7 @@ namespace StaplesBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.CurrentOrders.FindAsync(id);
 
             if (order == null)
             {
@@ -44,41 +44,6 @@ namespace StaplesBackend.Controllers
             }
 
             return Ok(order);
-        }
-
-        // PUT: api/Orders/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder([FromRoute] int id, [FromBody] CurrentOrder order)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != order.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(order).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Orders
@@ -90,7 +55,7 @@ namespace StaplesBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Orders.Add(order);
+            _context.CurrentOrders.Add(order);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetOrder", new { id = order.Id }, order);
@@ -105,21 +70,19 @@ namespace StaplesBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.CurrentOrders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
+            ArchivedOrder archivedOrder = new ArchivedOrder(order);
 
-            _context.Orders.Remove(order);
+            _context.ArchivedOrders.Add(archivedOrder);
+            _context.CurrentOrders.Remove(order);
+
             await _context.SaveChangesAsync();
 
             return Ok(order);
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace StaplesBackend.Data
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Client> Clients { get; set; }
-        public DbSet<CurrentOrder> Orders { get; set; }
+        public DbSet<CurrentOrder> CurrentOrders { get; set; }
         public DbSet<ArchivedOrder> ArchivedOrders { get; set; }
         
 

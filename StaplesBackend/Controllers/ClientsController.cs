@@ -20,12 +20,14 @@ namespace StaplesBackend.Controllers
             _context = context;
         }
 
+
         // GET: api/Clients
         [HttpGet]
         public IEnumerable<Client> GetClients()
         {
             return _context.Clients;
         }
+
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
@@ -37,7 +39,6 @@ namespace StaplesBackend.Controllers
             }
 
             var client = await _context.Clients.FindAsync(id);
-
             if (client == null)
             {
                 return NotFound();
@@ -46,38 +47,17 @@ namespace StaplesBackend.Controllers
             return Ok(client);
         }
 
-        
 
-        // GET: api/Clients/search/login/somelogin
-        [HttpGet("search/login/{login}")]
-        public IActionResult SearchClientsByLogin([FromRoute] string login)
+        // GET: api/Clients/search?login=somelogin&firstname=john
+        [HttpGet("search")]
+        public IActionResult SearchClients([FromQuery] ClientQuery query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var client = _context.Clients.Where(c => c.Login == login);
-
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(client);
-        }
-
-        // GET: api/Clients/search/firstname/somename
-        [HttpGet("search/firstname/{name}")]
-        public IActionResult SearchClientsByFirstName([FromRoute] string name)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var clients = _context.Clients.Where(c => c.FirstName == name);
-
+            var clients = _context.Clients.Where(c => query.Match(c));
             if (clients == null)
             {
                 return NotFound();
@@ -86,24 +66,6 @@ namespace StaplesBackend.Controllers
             return Ok(clients);
         }
 
-        // GET: api/Clients/search/lastname/somename
-        [HttpGet("search/lastname/{name}")]
-        public IActionResult SearchClientsByLastName([FromRoute] string name)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var clients = _context.Clients.Where(c => c.LastName == name);
-
-            if (clients == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(clients);
-        }
 
         // PUT: api/Clients/5
         [HttpPut("{id}")]
@@ -140,6 +102,7 @@ namespace StaplesBackend.Controllers
             return NoContent();
         }
 
+
         // POST: api/Clients
         [HttpPost]
         public async Task<IActionResult> PostClient([FromBody] Client client)
@@ -148,13 +111,13 @@ namespace StaplesBackend.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
 
-        
 
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]
@@ -178,12 +141,6 @@ namespace StaplesBackend.Controllers
         }
 
 
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(e => e.Id == id);
-        }
-
-
         #region ClientOrders
         //Api for orders of given client
 
@@ -193,23 +150,14 @@ namespace StaplesBackend.Controllers
         /// <param name="id">ID of the client</param>
         /// <returns>All orders of given the client.</returns>
         [HttpGet("{id}/orders")] // GET: api/Clients/5/orders
-        public IActionResult GetOrdersOfClient([FromRoute] int id)
+        public async Task<IActionResult> GetOrdersOfClientAsync([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Client client;
-            try
-            {
-                client = _context.Clients.Include(c => c.Orders).Single(c => c.Id == id);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
-
+            Client client = await _context.Clients.Include(c => c.Orders).SingleAsync(c => c.Id == id);
             if (client == null)
             {
                 return NotFound();
@@ -225,23 +173,14 @@ namespace StaplesBackend.Controllers
         /// <param name="id">ID of the client</param>
         /// <returns>All archived orders of given the client.</returns>
         [HttpGet("{id}/archivedorders")] // GET: api/Clients/5/archivedorders
-        public IActionResult GetArchivedOrdersOfClient([FromRoute] int id)
+        public async Task<IActionResult> GetArchivedOrdersOfClientAsync([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Client client;
-            try
-            {
-                client = _context.Clients.Include(c => c.ArchivedOrders).Single(c => c.Id == id);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
-
+            Client client = await _context.Clients.Include(c => c.ArchivedOrders).SingleAsync(c => c.Id == id);
             if (client == null)
             {
                 return NotFound();
@@ -264,9 +203,8 @@ namespace StaplesBackend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var client = await _context.Clients.FindAsync(id);
 
-            if (client == null)
+            if (!ClientExists(id))
             {
                 return NotFound();
             }
@@ -274,7 +212,7 @@ namespace StaplesBackend.Controllers
             order.ClientId = id;
             var newOrder = new CurrentOrder(order);
 
-            _context.Orders.Add(newOrder);
+            _context.CurrentOrders.Add(newOrder);
             _context.SaveChanges();
 
             return NoContent();
@@ -287,7 +225,7 @@ namespace StaplesBackend.Controllers
         /// <param name="clientId">Id of the client.</param>
         /// <param name="orderId">Id of the order to delete.</param>
         /// <returns>Return deleted order.</returns>
-        [HttpDelete("{clientId}/order/{orderId}")] // DELETE: api/Clients/5/order/3
+        [HttpDelete("{clientId}/orders/{orderId}")] // DELETE: api/Clients/5/orders/3
         public async Task<IActionResult> DeleteOrder([FromRoute] int clientId, [FromRoute] int orderId)
         {
             if (!ModelState.IsValid)
@@ -295,8 +233,7 @@ namespace StaplesBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = _context.Orders.Find(orderId);
-
+            var order = await _context.CurrentOrders.FindAsync(orderId);
             if (order == null)
             {
                 return NotFound();
@@ -308,16 +245,19 @@ namespace StaplesBackend.Controllers
             }
             ArchivedOrder archivedOrder = new ArchivedOrder(order);
 
-            var client = _context.Clients.Include(c => c.Orders).Single(c => c.Id == clientId);
-
-            client.Orders.Remove(order);
-            _context.Orders.Remove(order);
             _context.ArchivedOrders.Add(archivedOrder);
+            _context.CurrentOrders.Remove(order);
 
             await _context.SaveChangesAsync();
 
             return Ok(order);
         }
         #endregion
+
+
+        private bool ClientExists(int id)
+        {
+            return _context.Clients.Any(e => e.Id == id);
+        }
     }
 }
