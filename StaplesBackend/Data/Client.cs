@@ -9,7 +9,7 @@ namespace StaplesBackend.Data
     public class Client
     {
         [Key]
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         [Required]
         [MaxLength(256)]

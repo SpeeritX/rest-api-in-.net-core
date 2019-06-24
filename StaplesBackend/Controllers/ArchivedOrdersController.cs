@@ -21,6 +21,10 @@ namespace StaplesBackend.Controllers
         }
 
         // GET: api/ArchivedOrders
+        /// <summary>
+        /// Returns all archived orders.
+        /// </summary>
+        /// <returns>All archived orders.</returns>
         [HttpGet]
         public IEnumerable<ArchivedOrder> GetArchivedOrders()
         {
@@ -28,6 +32,11 @@ namespace StaplesBackend.Controllers
         }
 
         // GET: api/ArchivedOrders/5
+        /// <summary>
+        /// Returns archived order with the given ID.
+        /// </summary>
+        /// <param name="id">ID of archived order.</param>
+        /// <returns>Archived order with the given ID.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetArchivedOrder([FromRoute] int id)
         {

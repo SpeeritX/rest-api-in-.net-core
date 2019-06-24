@@ -20,15 +20,26 @@ namespace StaplesBackend.Controllers
             _context = context;
         }
 
+
         // GET: api/Orders
-        [HttpGet]
+        /// <summary>
+        /// Returns all orders.
+        /// </summary>
+        /// <returns>All orders.</returns>
+        [HttpGet] 
         public IEnumerable<CurrentOrder> GetOrders()
         {
             return _context.CurrentOrders;
         }
 
+
         // GET: api/Orders/5
-        [HttpGet("{id}")]
+        /// <summary>
+        /// Returns order with the given ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Order with the given ID</returns>
+        [HttpGet("{id}")] 
         public async Task<IActionResult> GetOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -46,8 +57,14 @@ namespace StaplesBackend.Controllers
             return Ok(order);
         }
 
+
         // POST: api/Orders
-        [HttpPost]
+        /// <summary>
+        /// Creates new order.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns>Created order.</returns>
+        [HttpPost] 
         public async Task<IActionResult> PostOrder([FromBody] CurrentOrder order)
         {
             if (!ModelState.IsValid)
@@ -58,10 +75,15 @@ namespace StaplesBackend.Controllers
             _context.CurrentOrders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            return CreatedAtAction("GetOrder", new { id = order.ID }, order);
         }
 
         // DELETE: api/Orders/5
+        /// <summary>
+        /// Deletes order with the given ID. Copy of the order is saved as archived order.
+        /// </summary>
+        /// <param name="id">>ID of the order to delete.</param>
+        /// <returns>Deleted order.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder([FromRoute] int id)
         {

@@ -21,7 +21,7 @@ namespace StaplesBackend.Data
         }
 
         [Key]
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         [Required]
         public int ClientId { get; set; }
