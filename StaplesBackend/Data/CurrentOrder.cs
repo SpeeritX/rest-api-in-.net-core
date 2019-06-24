@@ -8,18 +8,32 @@ namespace StaplesBackend.Data
 {
     public class CurrentOrder:Order
     {
-        public CurrentOrder():base()
+        #region Public Properties
+
+        [Required]
+        public Status Status { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public CurrentOrder() : base()
         {
-            Status = Status.Waiting;
+            Initiate();
         }
 
         public CurrentOrder(Order order) : base(order)
         {
-            Status = Status.Waiting;
+            Initiate();
         }
 
-        [Required]
-        public Status Status { get; set; }
+        #endregion
+
+
+        private void Initiate()
+        {
+            Status = Status.Waiting;
+        }
     }
 
     public enum Status { Waiting, Processing, Completed }

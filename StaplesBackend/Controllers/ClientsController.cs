@@ -20,7 +20,7 @@ namespace StaplesBackend.Controllers
             _context = context;
         }
 
-        #region ClientApi
+        #region Client Api
 
         // GET: api/Clients
         /// <summary>
@@ -146,7 +146,7 @@ namespace StaplesBackend.Controllers
 
         #endregion
 
-        #region ClientOrdersApi
+        #region ClientOrders Api
         //Api for orders of the given client
 
         // GET: api/Clients/5/orders

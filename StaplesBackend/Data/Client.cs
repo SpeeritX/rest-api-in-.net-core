@@ -8,6 +8,8 @@ namespace StaplesBackend.Data
 {
     public class Client
     {
+        #region Public Properties
+
         [Key]
         public int ID { get; set; }
 
@@ -33,10 +35,14 @@ namespace StaplesBackend.Data
         public IList<CurrentOrder> Orders { get; set; }
 
         public IList<ArchivedOrder> ArchivedOrders { get; set; }
+
+        #endregion
     }
 
     public class ClientQuery
     {
+        #region Public Properties
+
         public string Login { get; set; }
 
         public string FirstName { get; set; }
@@ -47,6 +53,13 @@ namespace StaplesBackend.Data
 
         public int Phone { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// Checks if query matches the client.
+        /// </summary>
+        /// <param name="client">Client to check against query.</param>
+        /// <returns>True if client matches query. Else false</returns>
         public bool Match(Client client)
         {
             if (Login != null && client.Login != null 
