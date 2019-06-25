@@ -161,6 +161,11 @@ namespace StaplesBackend.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(!ClientExists(id))
+            {
+                return NotFound();
+            }
+
             Client client = await _context.Clients.Include(c => c.Orders).SingleAsync(c => c.ID == id);
             if (client == null)
             {
@@ -183,6 +188,11 @@ namespace StaplesBackend.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (!ClientExists(id))
+            {
+                return NotFound();
             }
 
             Client client = await _context.Clients.Include(c => c.ArchivedOrders).SingleAsync(c => c.ID == id);
