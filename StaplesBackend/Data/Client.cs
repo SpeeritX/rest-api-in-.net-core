@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StaplesBackend.Data
 {
@@ -26,7 +24,6 @@ namespace StaplesBackend.Data
         public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
         [MaxLength(256)]
         public string Email { get; set; }
 
